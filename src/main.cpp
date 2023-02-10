@@ -16,18 +16,16 @@ CRGB currentColor;
 CRGB targetColor;
 uint8_t state = 0;
 
-void fade(CRGB target, uint8_t steps = 100){
-  unsigned long start = millis();
+void fade(CRGB target, uint8_t steps = 255){
   color_fader::init(steps);
   color_fader::set_colors(currentColor, target);
   for (int i = 0; i <= steps; i++){
     currentColor = color_fader::fade();
-    for (int i = 0; i < NUM_LEDS; i++)
+    for (uint8_t i = 0; i < NUM_LEDS; i++)
       leds[i] = currentColor;
     FastLED.show();
-    //delay(0);
+    delay(20);
   }
-  Serial.printf("fade done... %hhu steps in %lums\r\n", steps, millis()-start);
 }
 
 void setup() { 
@@ -35,24 +33,20 @@ void setup() {
   delay(500);
   Serial.println();
   FastLED.addLeds<WS2812B, DATA_PIN, GRB>(leds, NUM_LEDS);  // GRB ordering is typical
-  FastLED.setBrightness(255);
+  FastLED.setBrightness(30);
   currentColor = CRGB::Pink;
   Serial.println("yay");
 }
 
 void loop() {
-  Serial.println("g");
-  fade(CRGB::Green);
-  Serial.println("done");
+  fade(CRGB::Cyan);
   delay(1000);
-
-  Serial.println("r");
-  fade(CRGB::Red);
-  Serial.println("done");
+  fade(CRGB::DarkBlue);
   delay(1000);
-
-  Serial.println("b");
-  fade(CRGB::Blue);
-  Serial.println("done");
+  fade(CRGB(0x0000FEA1));
+  delay(1000);
+  fade(CRGB::DarkGreen);
+  delay(1000);
+  fade(CRGB::DarkRed);
   delay(1000);
 }
